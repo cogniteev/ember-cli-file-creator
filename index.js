@@ -7,20 +7,28 @@ var cachedTree;
 module.exports = {
     name: 'ember-cli-file-creator',
     init: function() {
-        cachedTree = null;
+        cachedTree = {};
     },
 
-    treeForApp: function() {
-        if (cachedTree === null) {
-            cachedTree = mergeTrees(this.options.map(createFile, this));
-        }
-        return cachedTree;
+    treeFor: function(name) {
+      var tree = cachedTree[name];
+      if (tree === undefined) {
+        tree = mergeTrees(this.options.filter(filesForTree(name)).map(createFile, this));
+        cachedTree[name] = tree;
+      }
+      return tree;
     },
     included: function(app) {
         this._super.included(app);
         this.options = app.options.fileCreator || [];
     }
 };
+
+function filesForTree(tree) {
+  return function(current) {
+    return current.tree === undefined && tree === 'app' || current.tree === tree;
+  };
+}
 
 function contentFor(content) {
     if (typeof content === 'function') {
