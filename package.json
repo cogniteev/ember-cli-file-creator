@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-file-creator",
-  "version": "0.1.1",
+  "version": "0.1.1-post0",
   "description": "Create files and add to ember app tree.",
   "directories": {
     "doc": "doc",
